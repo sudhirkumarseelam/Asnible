@@ -1,0 +1,27 @@
+[all]
+ubuntu1 ansible_port=2005
+ubuntu5 ansible_port=2001
+ubuntu6 ansible_port=2002
+centos1 ansible_port=2003
+centos2 ansible_port=2004
+
+[all:vars]
+ansible_user=root
+ansible_host=localhost
+ansible_private_key_file=/root/.ssh/id_rsa
+
+[dev]
+ubuntu5
+
+[qa]
+centos1
+
+[prod]
+ubuntu6
+centos2
+
+[ubuntu]
+ubuntu[5:6]
+
+[centos]
+centos[1:2]

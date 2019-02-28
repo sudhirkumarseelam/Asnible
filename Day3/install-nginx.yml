@@ -1,0 +1,36 @@
+- name: This playbook will install nginx web server, configure it and deploy web page in it.
+  hosts: all
+  vars:
+    - greeting_message: DevOps!
+    - provisioner_tool: Docker
+    - cm_tool: Ansible
+  tasks:
+    - name: Install nginx web server
+      when: ( ansible_distribution == "ubuntu" and ansible_os_family == "debian" )
+      apt: name=nginx state=latest update_cache=yes
+      register: output
+
+    - name: Print the output of apt task here
+      when: ( ansible_distribution == "Ubuntu" and otput.failed == false )
+      debug: var=output
+
+    - name: Verify the nginx service status 
+      shell: service nginx status
+      register: output
+  vars_files:
+    - nginx-variables.yml
+
+  tasks:
+    - include: "install-nginx-{{ansible_distribution|lower}}.yml"
+
+    - include: start-nginx-service.yml
+
+    - include: "configure-nginx-{{ansible_distribution|lower}}.yml"
+
+    - include: update-document-root-folder.yml
+    - include: deploy-custom-webpage.yml     
+
+- name: Test the nginx deployments
+  hosts: localhost
+  tasks:
+     - include: test-nginx-deployment.yml
